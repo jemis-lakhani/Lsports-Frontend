@@ -1,15 +1,9 @@
 import React, { useMemo, useState } from "react";
-import WinOrLose from "./WinOrLose";
 import { Card, CardHeader } from "@/components/ui/card";
-import UnderOver from "./UnderOver";
-import { Button } from "@/components/ui/button";
-import HandiCap from "./HandiCap";
-import { useDispatch } from "react-redux";
 import BetRow from "./BetRow";
 import { Separator } from "@/components/ui/separator";
 
 function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
-  const dispatch = useDispatch();
   const [leagueName, setLeagueName] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
@@ -26,15 +20,13 @@ function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
     }
   }, []);
 
-  const handleMarket = () => {};
-
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
       <Card className="flex flex-col gap-2 bg-gradient-to-r from-amber-900 to-pink-900 p-2">
         <div className="flex justify-end h-5 items-center space-x-2 text-xs">
-          <div className="font-bold">{market}</div>
-          <Separator className="w-[2px]" orientation="vertical" />
+          <div className="font-bold uppercase">{market}</div>
+          <Separator className="w-[2px] bg-gray-400" orientation="vertical" />
           <span>{time}</span>
         </div>
         <CardHeader className="flex flex-row justify-evenly items-center space-y-0 text-sm p-0 px-1">

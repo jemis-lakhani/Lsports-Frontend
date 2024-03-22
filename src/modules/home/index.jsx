@@ -8,8 +8,8 @@ const MainComponent = () => {
       <h6 className="w-full text-primary text-xl uppercase font-bold mb-2 ml-2">
         Pre Match
       </h6>
-      <div className="h-[95%]">
-        <Card className="h-full p-4 border-4">
+      <div style={{ height: "calc(100% - 30px)" }}>
+        <Card className="h-full border-[2px]">
           <Sports />
         </Card>
       </div>

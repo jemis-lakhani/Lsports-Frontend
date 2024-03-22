@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import WinOrLose from "./WinOrLose";
 import { Card, CardHeader } from "@/components/ui/card";
 import UnderOver from "./UnderOver";
@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { setFixtureId, setMarkets } from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
+import { cardBG } from "@/lib/constants";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -76,7 +77,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   return (
     <div className="flex flex-col gap-2" ref={reference}>
       <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
-      <Card className="flex flex-col gap-2 bg-gradient-to-r from-amber-900 to-pink-900 p-2">
+      <Card className={`flex flex-col gap-2 p-2 ${cardBG[fixture?.Sport?.Id]}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 text-white text-xs p-0 px-1">
           <span className="mt-0">{time}</span>
           {total > 0 ? (

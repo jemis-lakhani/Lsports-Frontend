@@ -43,6 +43,10 @@ const BetRow = ({ market, bets, selectedBet }) => {
       homeBet = "1";
       drawBet = "X";
       awayBet = "2";
+    } else if (market === "incl/overtime") {
+      homeBet = "1";
+      drawBet = null;
+      awayBet = "2";
     }
 
     if (homeBet) {

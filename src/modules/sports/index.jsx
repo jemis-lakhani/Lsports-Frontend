@@ -34,7 +34,6 @@ const Sports = () => {
   const {
     data: sportsList,
     isSuccess,
-    isPending,
     isFetching,
   } = useQuery({
     queryKey: ["sports-list"],
@@ -50,17 +49,26 @@ const Sports = () => {
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="flex flex-col h-full"
+      style={{ height: "calc(100% - 4rem)" }}
+    >
       {isSuccess && !isFetching && sportsList?.data?.length !== 0 && (
         <Tabs
-          className="w-full px-4"
-          defaultValue={sportsList.data[0].Id}
+          className="w-full px-4 pt-4"
+          defaultValue="all-sports"
           onValueChange={(value) => {
             dispatch(setLoader(true));
-            setSportId(value);
+            setSportId(value === "all-sports" ? "" : value);
           }}
         >
-          <TabsList className="grid grid-cols-7 w-full h-auto">
+          <TabsList className="grid grid-cols-8 w-full h-auto">
+            <TabsTrigger
+              className="py-2 justify-evenly text-primary text-xs truncate uppercase select-none"
+              value="all-sports"
+            >
+              All Sports
+            </TabsTrigger>
             {sportsList?.data?.map((s) => (
               <TabsTrigger
                 key={s.Id + s.Name}
@@ -75,25 +83,19 @@ const Sports = () => {
         </Tabs>
       )}
       {isFetching && (
-        <div className="animate-pulse px-4">
+        <div className="animate-pulse px-4 pt-4">
           <div className="h-10 bg-gray-800 rounded"></div>
         </div>
       )}
-      <div className="grid grid-cols-3 xl:grid-cols-3 gap-4 h-full">
-        <div className="scrollbar-thumb-rounded scrollbar-thin scrollbar-track-rounded scrollbar-thumb-slate-700 scrollbar-track-transparent h-full px-4 overflow-y-auto ">
-          <div className="h-full max-h-[75vh] min-h-[75vh]">
-            <Fixtures sportId={sportId} />
-          </div>
+      <div className="grid grid-cols-3 xl:grid-cols-3 space-x-3 h-full px-4 pt-4">
+        <div className="relative h-full overflow-y-scroll border-2 rounded-lg">
+          <Fixtures sportId={sportId} />
         </div>
-        <div className="scrollbar-thumb-rounded scrollbar-thin scrollbar-track-rounded scrollbar-thumb-slate-700 scrollbar-track-transparent h-full px-4 overflow-y-auto ">
-          <div className="h-full max-h-[75vh] min-h-[75vh]">
-            <FixtureMarket />
-          </div>
+        <div className="relative h-full overflow-y-auto border-2 rounded-lg">
+          <FixtureMarket />
         </div>
-        <div className="scrollbar-thumb-rounded scrollbar-thin scrollbar-track-rounded scrollbar-thumb-slate-700 scrollbar-track-transparent h-full px-4 py-2 overflow-y-auto border-2 border-amber-700 rounded-lg">
-          <div className="h-full max-h-[75vh] min-h-[75vh]">
-            <BetSlip />
-          </div>
+        <div className="relative h-full overflow-y-auto border-2 rounded-lg">
+          <BetSlip />
         </div>
       </div>
     </div>

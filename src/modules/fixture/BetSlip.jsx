@@ -66,8 +66,8 @@ const BetSlip = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-row gap-2 p-2">{slipComponents}</div>
+    <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-row gap-2">{slipComponents}</div>
       <Button
         className={clsx("", {
           "opacity-40 pointer-events-none select-none truncate":

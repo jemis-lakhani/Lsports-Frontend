@@ -19,6 +19,8 @@ const fetchFixtures = async ({ pageParam, sportId }) => {
   };
   if (sportId) {
     body.sportIds = [sportId];
+  } else {
+    body.sportIds = [6046, 48242, 154830, 35232, 154914, 131506, 687890];
   }
   return fetch(`${BACKEND_URL}/fixtures`, {
     method: "POST",
@@ -105,7 +107,7 @@ const Fixtures = ({ sportId }) => {
   return (
     <div className="relative flex flex-col gap-4 h-full">
       <div
-        className={clsx("flex flex-col gap-4", {
+        className={clsx("flex flex-col p-4 gap-4", {
           "opacity-20": isFetching,
         })}
       >

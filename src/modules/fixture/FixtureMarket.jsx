@@ -9,6 +9,7 @@ import Loader from "../Loader";
 import clsx from "clsx";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
+import IncludingOvertime from "./IncludingOvertime";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -26,7 +27,6 @@ const FixtureMarket = () => {
   };
 
   const handleBetChange = ({ allBets, market, selectedBet }) => {
-    console.log({ fixtureId }, { allBets }, { market }, { selectedBet });
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
@@ -66,13 +66,13 @@ const FixtureMarket = () => {
         </div>
       )}
       <div
-        className={clsx("flex flex-col gap-2", {
+        className={clsx("flex flex-col gap-2 p-4", {
           "opacity-20": isLoading,
         })}
       >
         <div className="h-[200px] w-full border-2 border-amber-800 rounded-lg"></div>
         <Tabs className="w-full">
-          <TabsList className="flex flex-col h-full gap-3 justify-between bg-transparent">
+          <TabsList className="flex flex-col h-full gap-3 p-0 justify-between bg-transparent">
             {markets.length > 0 && markets?.length !== 0 ? (
               markets?.map((mk, index) => {
                 const id =
@@ -82,12 +82,16 @@ const FixtureMarket = () => {
                       mk?.Bets[0]?.LastUpdate
                     : index;
                 const marketName = mk.Name?.toLowerCase();
+                console.log({ marketName });
                 if (
                   marketName.includes("1x2") ||
                   marketName.includes("winner")
                 ) {
                   return (
-                    <Card key={id} className="flex flex-col w-full gap-2 p-2">
+                    <Card
+                      key={id}
+                      className="flex flex-col border-2 w-full gap-2 p-2"
+                    >
                       {Title(mk.Name)}
                       <WinOrLose
                         isMainCard={false}
@@ -98,7 +102,10 @@ const FixtureMarket = () => {
                   );
                 } else if (marketName.includes("under/over")) {
                   return (
-                    <Card key={id} className="flex flex-col w-full gap-2 p-2">
+                    <Card
+                      key={id}
+                      className="flex flex-col border-2 w-full gap-2 p-2"
+                    >
                       {Title(mk.Name)}
                       <UnderOver
                         isMainCard={false}
@@ -109,7 +116,7 @@ const FixtureMarket = () => {
                   );
                 } else if (marketName.includes("handicap")) {
                   return (
-                    <Card key={id} className="flex flex-col w-full gap-2 p-2">
+                    <Card key={id} className="flex flex-col border-2 w-full gap-2 p-2">
                       {Title(mk.Name)}
                       <HandiCap
                         isMainCard={false}
@@ -120,9 +127,19 @@ const FixtureMarket = () => {
                   );
                 } else if (marketName.includes("odd/even")) {
                   return (
-                    <Card key={id} className="flex flex-col w-full gap-2 p-2">
+                    <Card key={id} className="flex flex-col border-2 w-full gap-2 p-2">
                       {Title(mk.Name)}
                       <OddEven market={mk} handleBetChange={handleBetChange} />
+                    </Card>
+                  );
+                } else if (marketName.includes("12 including overtime")) {
+                  return (
+                    <Card key={id} className="flex flex-col border-2 w-full gap-2 p-2">
+                      {Title(mk.Name)}
+                      <IncludingOvertime
+                        market={mk}
+                        handleBetChange={handleBetChange}
+                      />
                     </Card>
                   );
                 }
