@@ -1,0 +1,80 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import clsx from "clsx";
+
+const BetRow = ({ market, bets, selectedBet }) => {
+  console.log({ bets });
+  console.log({ selectedBet });
+  const [tabs, setTabs] = useState([]);
+
+  const TabTrigger = (key, title, price) => {
+    return (
+      <TabsTrigger
+        key={key}
+        value={key}
+        className={clsx(
+          "flex flex-row justify-between w-[30%] text-white border-[1px] border-white data-[state=active]:text-black data-[state=active]:bg-white cursor-text",
+        )}
+      >
+        <span className="text-xs">{title}</span>
+        <span className="text-xs">{price}</span>
+      </TabsTrigger>
+    );
+  };
+
+  useEffect(() => {
+    const arr = [];
+    let homeBet;
+    let drawBet;
+    let awayBet;
+    if (market === "odd/even") {
+      homeBet = "Odd";
+      drawBet = null;
+      awayBet = "Even";
+    } else if (market === "under/over") {
+      homeBet = "Under";
+      drawBet = null;
+      awayBet = "Over";
+    } else if (market === "win/lose") {
+      homeBet = "1";
+      drawBet = "X";
+      awayBet = "2";
+    } else if (market === "handicap") {
+      homeBet = "1";
+      drawBet = "X";
+      awayBet = "2";
+    }
+
+    if (homeBet) {
+      const home = bets?.find((bet) => bet.Name === homeBet);
+      if (home) {
+        arr.push(TabTrigger(home.Id, homeBet, home.Price));
+      }
+    }
+    if (drawBet) {
+      const draw = bets?.find((bet) => bet.Name === drawBet);
+      if (draw) {
+        arr.push(TabTrigger(draw.Id, drawBet, draw.Price));
+      }
+    }
+    if (awayBet) {
+      const away = bets?.find((bet) => bet.Name === awayBet);
+      if (away) {
+        arr.push(TabTrigger(away.Id, awayBet, away.Price));
+      }
+    }
+    setTabs(arr);
+  }, [selectedBet]);
+
+  return (
+    <>
+      <Tabs className="w-full" value={selectedBet}>
+        <TabsList className="flex flex-row justify-between bg-transparent">
+          {tabs?.map((tab) => tab)}
+        </TabsList>
+      </Tabs>
+    </>
+  );
+};
+
+export default BetRow;
