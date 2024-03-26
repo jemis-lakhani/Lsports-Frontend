@@ -9,7 +9,7 @@ const MainComponent = () => {
         Pre Match
       </h6>
       <div style={{ height: "calc(100% - 30px)" }}>
-        <Card className="h-full border-[2px]">
+        <Card className="h-full border-[2px] rounded-lg">
           <Sports />
         </Card>
       </div>

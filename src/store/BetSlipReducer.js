@@ -23,13 +23,18 @@ const betSlipReducer = createSlice({
           ? state.slips[state.slips.length - 1]
           : 0;
       state.currentSlip = newCurrentSlip;
-      // console.log(state.slips);
+    },
+    deleteBet: (state, action) => {
+      const { fixtureId } = action.payload;
+      delete state.bets[state.currentSlip][fixtureId];
     },
     setBets: (state, action) => {
       const { market, bets, fixtureId, fixture, selectedBet } = action.payload;
-      // Get the current bets array for the provided slip key, or initialize an empty array if it doesn't exist
+      if (state.slips.length === 0) {
+        state.slips.push(1);
+        state.currentSlip = 1;
+      }
       const currentBets = state.bets[state.currentSlip] || {};
-      // Update the bet object with the new fixture and bet based on the provided fixtureId
       state.bets[state.currentSlip] = {
         ...currentBets,
         [fixtureId]: {
@@ -44,7 +49,7 @@ const betSlipReducer = createSlice({
   },
 });
 
-export const { setCurrentSlip, setSlips, deleteSlip, setBets } =
+export const { setCurrentSlip, setSlips, deleteSlip, setBets, deleteBet } =
   betSlipReducer.actions;
 
 export default betSlipReducer.reducer;

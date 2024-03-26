@@ -7,6 +7,8 @@ import { setFixtureId, setMarkets } from "@/store/MarketReducer";
 import Loader from "../Loader";
 import { setLoader } from "@/store/LoaderReducer";
 import clsx from "clsx";
+import { IoSyncOutline } from "react-icons/io5";
+import { useQueryClient } from "@tanstack/react-query";
 
 const COUNT = 10;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -38,10 +40,12 @@ const fetchFixtures = async ({ pageParam, sportId }) => {
 };
 
 const Fixtures = ({ sportId }) => {
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [isInitialFetch, setInitialFetch] = useState(true);
   const { inView, ref } = useInView();
   const [page, setPage] = useState(0);
+  const [sportName, setSportName] = useState("");
   const {
     data: fixtures,
     refetch,
@@ -88,6 +92,15 @@ const Fixtures = ({ sportId }) => {
             : null
           : null;
 
+      const sportName =
+        fixtures?.pages && fixtures?.pages?.length > 0
+          ? fixtures?.pages[0].data?.documents &&
+            fixtures?.pages[0].data?.documents.length > 0
+            ? fixtures?.pages[0].data?.documents[0].value?.Fixture?.Sport?.Name
+            : ""
+          : "";
+      setSportName(sportName);
+
       dispatch(setMarkets(market === null ? [] : market));
       dispatch(setFixtureId(fixtureId));
     }
@@ -104,45 +117,70 @@ const Fixtures = ({ sportId }) => {
     dispatch(setLoader(isFetching));
   }, [isFetching]);
 
+  const refreshData = () => {
+    queryClient.invalidateQueries({ queryKey: ["fixtures"] });
+  };
+
   return (
-    <div className="relative flex flex-col gap-4 h-full">
-      <div
-        className={clsx("flex flex-col p-4 gap-4", {
-          "opacity-20": isFetching,
-        })}
-      >
-        {isSuccess &&
-          fixtures?.pages.map((page, i) =>
-            page?.data?.documents?.map((doc, j) => {
-              if (
-                fixtures?.pages.length === i + 1 &&
-                page?.data?.documents.length === j + 1
-              ) {
-                return (
-                  <FixtureMainCard
-                    reference={ref}
-                    key={doc?.id}
-                    id={doc?.id}
-                    markets={doc?.value?.Markets}
-                    fixture={doc?.value?.Fixture}
-                    fixtureId={doc?.value?.FixtureId}
-                  />
-                );
-              } else {
-                return (
-                  <FixtureMainCard
-                    key={doc?.id}
-                    id={doc?.id}
-                    markets={doc?.value?.Markets}
-                    fixture={doc?.value?.Fixture}
-                    fixtureId={doc?.value?.FixtureId}
-                  />
-                );
-              }
-            }),
-          )}
-        {isFetching && <Loader />}
+    <div className="flex flex-col relative h-full">
+      <div className="sticky w-full top-0 right-0 flex items-center justify-between p-2 text-white bg-muted rounded-none border-0 z-[1000]">
+        <span className="ml-2 uppercase">{sportName ? sportName : "All"}</span>
+        <button
+          className="flex items-center justify-between leading-none tracking-tight cursor-pointer"
+          onClick={() => refreshData()}
+        >
+          Refresh
+          <IoSyncOutline className="h-4 w-4 ml-1" />
+        </button>
       </div>
+      <div className="relative flex flex-col h-[95%] overflow-y-scroll">
+        <div
+          className={clsx("flex flex-col p-4 gap-4", {
+            "opacity-10": isFetching,
+          })}
+        >
+          {isSuccess &&
+            fixtures?.pages.map((page, i) =>
+              page?.data?.documents?.map((doc, j) => {
+                if (
+                  doc?.value?.Markets !== null &&
+                  doc?.value?.Markets?.length > 0
+                ) {
+                  if (
+                    fixtures?.pages.length === i + 1 &&
+                    page?.data?.documents.length === j + 1
+                  ) {
+                    return (
+                      <FixtureMainCard
+                        reference={ref}
+                        key={doc?.id}
+                        id={doc?.id}
+                        markets={doc?.value?.Markets}
+                        fixture={doc?.value?.Fixture}
+                        fixtureId={doc?.value?.FixtureId}
+                      />
+                    );
+                  } else {
+                    return (
+                      <FixtureMainCard
+                        key={doc?.id}
+                        id={doc?.id}
+                        markets={doc?.value?.Markets}
+                        fixture={doc?.value?.Fixture}
+                        fixtureId={doc?.value?.FixtureId}
+                      />
+                    );
+                  }
+                }
+              }),
+            )}
+        </div>
+      </div>
+      {isFetching && (
+        <div className="absolute top-0 right-0 flex justify-center items-center h-full w-full z-50">
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };

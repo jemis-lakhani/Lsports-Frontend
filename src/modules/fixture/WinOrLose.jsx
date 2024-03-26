@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 
 const WinOrLose = ({ market, isMainCard, handleBetChange }) => {
@@ -39,7 +39,7 @@ const WinOrLose = ({ market, isMainCard, handleBetChange }) => {
     handleBetChange({
       selectedBet,
       allBets: { selectedBet: arr },
-      market: "win/lose",
+      market: market?.Name,
     });
   };
 

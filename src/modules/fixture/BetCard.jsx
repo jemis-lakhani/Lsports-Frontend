@@ -2,8 +2,15 @@ import React, { useMemo, useState } from "react";
 import { Card, CardHeader } from "@/components/ui/card";
 import BetRow from "./BetRow";
 import { Separator } from "@/components/ui/separator";
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBet } from "@/store/BetSlipReducer";
+import clsx from "clsx";
+import { cardBG } from "@/lib/constants";
 
 function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
+  const dispatch = useDispatch();
+  const { bets: betsState } = useSelector((state) => state.bets);
   const [leagueName, setLeagueName] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
@@ -20,19 +27,35 @@ function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
     }
   }, []);
 
+  const handleDeleteBet = () => {
+    dispatch(deleteBet({ fixtureId, bets: betsState }));
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
-      <Card className="flex flex-col gap-2 bg-gradient-to-r from-amber-900 to-pink-900 p-2">
-        <div className="flex justify-end h-5 items-center space-x-2 text-xs">
-          <div className="font-bold uppercase">{market}</div>
+      <Card
+        className={clsx(
+          `flex flex-col gap-2 ${
+            fixture?.Sport?.Id
+              ? cardBG[fixture?.Sport?.Id]
+              : "bg-gradient-to-r from-amber-900 to-pink-900"
+          } p-2`,
+        )}
+      >
+        <div className="flex justify-end h-5 items-center space-x-2">
+          <div className="font-bold leading-none text-sm">{market}</div>
           <Separator className="w-[2px] bg-gray-400" orientation="vertical" />
-          <span>{time}</span>
+          <span className="text-sm">{time}</span>
+          <IoCloseCircleOutline
+            className="text-white h-6 w-6 cursor-pointer"
+            onClick={() => handleDeleteBet()}
+          />
         </div>
         <CardHeader className="flex flex-row justify-evenly items-center space-y-0 text-sm p-0 px-1">
-          <span>{team1}</span>
-          <span>VS</span>
-          <span>{team2}</span>
+          <span className="w-2/5 text-center">{team1}</span>
+          <span className="w-[20%] text-center">VS</span>
+          <span className="w-2/5 text-center">{team2}</span>
         </CardHeader>
         <BetRow market={market} bets={bets} selectedBet={selectedBet} />
       </Card>

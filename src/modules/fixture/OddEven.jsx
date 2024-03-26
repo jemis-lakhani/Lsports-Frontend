@@ -18,7 +18,7 @@ const OddEven = ({ market, handleBetChange }) => {
     handleBetChange({
       selectedBet,
       allBets: { selectedBet: arr },
-      market: "odd/even",
+      market: market?.Name,
     });
   };
 

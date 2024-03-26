@@ -1,24 +1,16 @@
 import { deleteSlip, setCurrentSlip, setSlips } from "@/store/BetSlipReducer";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BetCard from "./BetCard";
 import { Button } from "@/components/ui/button";
 import { FaCheck } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa";
 
 const BetSlip = () => {
   const dispatch = useDispatch();
   const { slips, currentSlip, bets } = useSelector((state) => state.bets);
   const { fixtureId } = useSelector((state) => state.markets);
-
-  useEffect(() => {
-    if (Object.keys(bets).length !== 0) {
-      //   console.log({ fixtureId }, { currentSlip });
-      if (fixtureId && currentSlip) {
-        // console.log({ bets });
-      }
-    }
-  }, [bets, fixtureId, currentSlip]);
 
   const createSlip = (e, number) => {
     if (!slips.includes(number)) {
@@ -66,15 +58,16 @@ const BetSlip = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-3 p-6 xl:p-4">
       <div className="flex flex-row gap-2">{slipComponents}</div>
       <Button
-        className={clsx("", {
+        className={clsx("w-auto ml-auto", {
           "opacity-40 pointer-events-none select-none truncate":
             slips.length === 0,
         })}
         onClick={() => deleteBetSlip()}
       >
+        <FaTrash className="mr-2 h-4 w-4" />
         Delete Slip
       </Button>
       {Object.keys(bets).length !== 0 &&

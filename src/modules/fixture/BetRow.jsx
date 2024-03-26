@@ -1,10 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 
 const BetRow = ({ market, bets, selectedBet }) => {
-  console.log({ bets });
-  console.log({ selectedBet });
   const [tabs, setTabs] = useState([]);
 
   const TabTrigger = (key, title, price) => {
@@ -27,23 +25,24 @@ const BetRow = ({ market, bets, selectedBet }) => {
     let homeBet;
     let drawBet;
     let awayBet;
-    if (market === "odd/even") {
+    const marketName = market?.toLowerCase();
+    if (marketName.includes("odd/even")) {
       homeBet = "Odd";
       drawBet = null;
       awayBet = "Even";
-    } else if (market === "under/over") {
+    } else if (marketName.includes("under/over")) {
       homeBet = "Under";
       drawBet = null;
       awayBet = "Over";
-    } else if (market === "win/lose") {
+    } else if (marketName.includes("1x2") || marketName.includes("winner")) {
       homeBet = "1";
       drawBet = "X";
       awayBet = "2";
-    } else if (market === "handicap") {
+    } else if (marketName.includes("handicap")) {
       homeBet = "1";
       drawBet = "X";
       awayBet = "2";
-    } else if (market === "incl/overtime") {
+    } else if (marketName.includes("12 including overtime")) {
       homeBet = "1";
       drawBet = null;
       awayBet = "2";

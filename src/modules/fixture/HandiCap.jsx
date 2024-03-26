@@ -1,5 +1,4 @@
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tabs } from "@radix-ui/react-tabs";
+import { TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 import React, { useMemo, useState } from "react";
 
@@ -34,7 +33,7 @@ const HandiCap = ({ market, isMainCard, handleBetChange }) => {
     handleBetChange({
       selectedBet,
       allBets: group,
-      market: "handicap",
+      market: market?.Name,
     });
   };
 

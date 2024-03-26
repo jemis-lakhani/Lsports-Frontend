@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import WinOrLose from "./WinOrLose";
 import { Card, CardHeader } from "@/components/ui/card";
 import UnderOver from "./UnderOver";
@@ -9,6 +9,7 @@ import { setFixtureId, setMarkets } from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
 import { cardBG } from "@/lib/constants";
+import { showMarkets } from "@/store/MobileViewReducer";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,6 +20,19 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const [team2, setTeam2] = useState();
   const [time, setTime] = useState();
   const [total, setTotal] = useState(0);
+  const [isMobileScreen, setMobileScreen] = useState(window.innerWidth < 1280);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setMobileScreen(window.innerWidth < 1280);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useMemo(() => {
     let total = 0;
@@ -39,16 +53,17 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const handleMarket = () => {
     dispatch(setMarkets(markets === null ? [] : markets));
     dispatch(setFixtureId(fixtureId));
+    if (isMobileScreen) {
+      dispatch(showMarkets());
+    }
   };
 
   const handleBetChange = ({ allBets, market, selectedBet }) => {
-    console.log({ fixtureId }, { allBets }, { market }, { selectedBet });
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
         bets.map((bet) => {
           if (bet.Id === selectedBet) {
-            console.log(bets);
             selectedBets = bets;
             return true;
           }
@@ -77,7 +92,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   return (
     <div className="flex flex-col gap-2" ref={reference}>
       <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
-      <Card className={`flex flex-col gap-2 p-2 ${cardBG[fixture?.Sport?.Id]}`}>
+      <Card className={`flex flex-col gap-2 p-3 ${cardBG[fixture?.Sport?.Id]}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 text-white text-xs p-0 px-1">
           <span className="mt-0">{time}</span>
           {total > 0 ? (
@@ -94,9 +109,9 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
           )}
         </CardHeader>
         <CardHeader className="flex flex-row justify-evenly items-center space-y-0 text-sm p-0 px-1">
-          <span>{team1}</span>
-          <span>VS</span>
-          <span>{team2}</span>
+          <span className="w-2/5 text-center">{team1}</span>
+          <span className="w-[20%] text-center">VS</span>
+          <span className="w-2/5 text-center">{team2}</span>
         </CardHeader>
         <Tabs className="w-full">
           <TabsList className="flex flex-col h-full gap-3 justify-between bg-transparent">

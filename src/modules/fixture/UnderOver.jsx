@@ -30,7 +30,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
     handleBetChange({
       selectedBet,
       allBets: group,
-      market: "under/over",
+      market: market?.Name,
     });
   };
 

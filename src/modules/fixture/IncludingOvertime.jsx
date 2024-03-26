@@ -3,7 +3,6 @@ import { TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 
 const IncludingOvertime = ({ market, handleBetChange }) => {
-  console.log("Inside bet change");
   const [tabs, setTabs] = useState([]);
 
   const TabTrigger = (key, title, price) => {
@@ -36,7 +35,7 @@ const IncludingOvertime = ({ market, handleBetChange }) => {
     handleBetChange({
       selectedBet,
       allBets: { selectedBet: arr },
-      market: "incl/overtime",
+      market: market?.Name,
     });
   };
 
