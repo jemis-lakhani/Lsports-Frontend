@@ -42,7 +42,7 @@ const BetRow = ({ market, bets, selectedBet }) => {
       homeBet = "1";
       drawBet = "X";
       awayBet = "2";
-    } else if (marketName.includes("12 including overtime")) {
+    } else if (marketName.includes("12")) {
       homeBet = "1";
       drawBet = null;
       awayBet = "2";

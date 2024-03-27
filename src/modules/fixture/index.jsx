@@ -76,31 +76,25 @@ const Fixtures = ({ sportId }) => {
   useEffect(() => {
     if (isInitialFetch && fixtures) {
       setInitialFetch(false);
-      const market =
-        fixtures?.pages && fixtures?.pages?.length > 0
-          ? fixtures?.pages[0].data?.documents &&
-            fixtures?.pages[0].data?.documents.length > 0
-            ? fixtures?.pages[0].data?.documents[0].value?.Markets
-            : []
-          : [];
-
-      const fixtureId =
-        fixtures?.pages && fixtures?.pages?.length > 0
-          ? fixtures?.pages[0].data?.documents &&
-            fixtures?.pages[0].data?.documents.length > 0
-            ? fixtures?.pages[0].data?.documents[0].value?.FixtureId
-            : null
-          : null;
-
-      const sportName =
-        fixtures?.pages && fixtures?.pages?.length > 0
-          ? fixtures?.pages[0].data?.documents &&
-            fixtures?.pages[0].data?.documents.length > 0
-            ? fixtures?.pages[0].data?.documents[0].value?.Fixture?.Sport?.Name
-            : ""
-          : "";
+      let market = null;
+      let fixtureId;
+      let sportName;
+      if (
+        fixtures?.pages &&
+        fixtures?.pages?.length > 0 &&
+        fixtures?.pages[0].data?.documents &&
+        fixtures?.pages[0].data?.documents.length > 0
+      ) {
+        fixtures?.pages[0].data?.documents?.some((doc) => {
+          if (doc?.value?.Markets !== null && doc?.value?.Markets.length > 0) {
+            market = doc.value?.Markets;
+            fixtureId = doc.value?.FixtureId;
+            sportName = doc.value?.Fixture?.Sport?.Name;
+            return true; // Exit the iteration early
+          }
+        });
+      }
       setSportName(sportName);
-
       dispatch(setMarkets(market === null ? [] : market));
       dispatch(setFixtureId(fixtureId));
     }

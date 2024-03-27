@@ -4,7 +4,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import UnderOver from "./UnderOver";
 import { Button } from "@/components/ui/button";
 import HandiCap from "./HandiCap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFixtureId, setMarkets } from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
@@ -15,6 +15,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const dispatch = useDispatch();
+  const { bets, currentSlip } = useSelector((state) => state.betSlip);
   const [leagueName, setLeagueName] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
@@ -37,7 +38,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   useMemo(() => {
     let total = 0;
     markets?.map((mk) => {
-      total += mk?.Bets?.length;
+      total += Math.floor(mk?.Bets?.length / 2);
     });
     setTotal(total);
     setLeagueName(fixture?.League?.Name);
@@ -58,11 +59,11 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
     }
   };
 
-  const handleBetChange = ({ allBets, market, selectedBet }) => {
+  const handleBetChange = ({ selectedBet, allBets, market }) => {
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
-        bets.map((bet) => {
+        bets.some((bet) => {
           if (bet.Id === selectedBet) {
             selectedBets = bets;
             return true;
@@ -89,6 +90,33 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
       });
   };
 
+  const isAnyMainWinLoseBet = (markets, mk) => {
+    return (
+      mk.Id === 1 ||
+      (mk.Id === 50 && !markets.some((m) => m.Id === 1)) ||
+      (mk.Id === 52 && !markets.some((m) => m.Id === 1 || m.Id === 50)) ||
+      (mk.Id === 226 &&
+        !markets.some((m) => m.Id === 1 || m.Id === 50 || m.Id === 52))
+    );
+  };
+
+  const isAnyMainUnderOverBet = (markets, mk) => {
+    return mk.Id === 2 || (mk.Id === 28 && !markets.some((m) => m.Id === 2));
+  };
+
+  const isAnyMainHandicapBet = (markets, mk) => {
+    return mk.Id === 3 || (mk.Id === 342 && !markets.some((m) => m.Id === 3));
+  };
+
+  const selectedBetFromMarkets = () => {
+    return bets &&
+      bets[currentSlip] &&
+      bets[currentSlip][fixtureId] &&
+      bets[currentSlip][fixtureId].selectedBet
+      ? bets[currentSlip][fixtureId].selectedBet
+      : "";
+  };
+
   return (
     <div className="flex flex-col gap-2" ref={reference}>
       <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
@@ -101,7 +129,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
                 className="text-xs font-bold h-6 px-3 py-4"
                 onClick={() => handleMarket()}
               >
-                {total}+
+                +{total}
               </Button>
             </span>
           ) : (
@@ -113,32 +141,31 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
           <span className="w-[20%] text-center">VS</span>
           <span className="w-2/5 text-center">{team2}</span>
         </CardHeader>
-        <Tabs className="w-full">
+        <Tabs className="w-full" value={selectedBetFromMarkets()}>
           <TabsList className="flex flex-col h-full gap-3 justify-between bg-transparent">
             {markets?.map((mk) => {
-              if (mk.Id === 1) {
+              if (isAnyMainWinLoseBet(markets, mk)) {
                 return (
                   <WinOrLose
                     key={mk.Id}
-                    isMainCard
                     market={mk}
                     handleBetChange={handleBetChange}
                   />
                 );
-              } else if (mk.Id === 2) {
+              } else if (isAnyMainUnderOverBet(markets, mk)) {
                 return (
                   <UnderOver
-                    key={mk.Id}
                     isMainCard
+                    key={mk.Id}
                     market={mk}
                     handleBetChange={handleBetChange}
                   />
                 );
-              } else if (mk.Id === 3) {
+              } else if (isAnyMainHandicapBet(markets, mk)) {
                 return (
                   <HandiCap
-                    key={mk.Id}
                     isMainCard
+                    key={mk.Id}
                     market={mk}
                     handleBetChange={handleBetChange}
                   />

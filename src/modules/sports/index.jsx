@@ -39,7 +39,7 @@ const icons = {
 const Sports = () => {
   const dispatch = useDispatch();
   const { isBetSlip, isMarkets } = useSelector((state) => state.mobileView);
-  const { currentSlip, bets } = useSelector((state) => state.bets);
+  const { currentSlip, bets } = useSelector((state) => state.betSlip);
   const [sportId, setSportId] = useState();
   const {
     data: sportsList,

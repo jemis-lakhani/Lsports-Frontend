@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const betSlipReducer = createSlice({
-  name: "bets",
+  name: "betSlip",
   initialState: {
     slips: [1],
     bets: {},

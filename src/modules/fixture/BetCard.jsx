@@ -10,7 +10,7 @@ import { cardBG } from "@/lib/constants";
 
 function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
   const dispatch = useDispatch();
-  const { bets: betsState } = useSelector((state) => state.bets);
+  const { bets: betsState } = useSelector((state) => state.betSlip);
   const [leagueName, setLeagueName] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();

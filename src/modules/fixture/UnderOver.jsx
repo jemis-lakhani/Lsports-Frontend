@@ -59,7 +59,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
             arr.push(
               <div
                 key={home.Id + away.Id}
-                className="flex justify-between text-xs text-white w-[30%]"
+                className="flex justify-between items-center text-xs text-white w-[30%]"
               >
                 <span>U/O</span>
                 <span>{MainLine}</span>
@@ -77,7 +77,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
             arr.push(
               <div
                 key={home.Id + away.Id}
-                className="flex justify-between text-xs text-white w-[30%]"
+                className="flex justify-between items-center text-xs text-white w-[30%]"
               >
                 <span>U/O</span>
                 <span>{BaseLine}</span>

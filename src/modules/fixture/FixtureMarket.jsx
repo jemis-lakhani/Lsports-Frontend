@@ -19,6 +19,7 @@ const FixtureMarket = () => {
   const dispatch = useDispatch();
   const { markets, fixtureId } = useSelector((state) => state.markets);
   const { loader: isLoading } = useSelector((state) => state.loader);
+  const { bets, currentSlip } = useSelector((state) => state.betSlip);
 
   const Title = (marketName) => {
     return (
@@ -32,7 +33,7 @@ const FixtureMarket = () => {
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
-        bets.map((bet) => {
+        bets.some((bet) => {
           if (bet.Id === selectedBet) {
             selectedBets = bets;
             return true;
@@ -59,6 +60,15 @@ const FixtureMarket = () => {
       });
   };
 
+  const selectedBetFromMainCard = () => {
+    return bets &&
+      bets[currentSlip] &&
+      bets[currentSlip][fixtureId] &&
+      bets[currentSlip][fixtureId].selectedBet
+      ? bets[currentSlip][fixtureId].selectedBet
+      : "";
+  };
+
   return (
     <div className="relative flex flex-col h-full">
       {isLoading && (
@@ -81,7 +91,7 @@ const FixtureMarket = () => {
         })}
       >
         <div className="h-[200px] w-full border-2 border-amber-800 rounded-lg"></div>
-        <Tabs className="w-full">
+        <Tabs className="w-full" value={selectedBetFromMainCard()}>
           <TabsList className="flex flex-col h-full gap-3 p-0 justify-between bg-transparent">
             {markets.length > 0 && markets?.length !== 0 ? (
               markets?.map((mk, index) => {
@@ -147,7 +157,7 @@ const FixtureMarket = () => {
                       <OddEven market={mk} handleBetChange={handleBetChange} />
                     </Card>
                   );
-                } else if (marketName.includes("12 including overtime")) {
+                } else if (marketName.includes("12")) {
                   return (
                     <Card
                       key={id}

@@ -8,7 +8,7 @@ const store = configureStore({
   reducer: {
     markets: MarketReducer,
     loader: LoaderReducer,
-    bets: BetSlipReducer,
+    betSlip: BetSlipReducer,
     mobileView: MobileViewReducer,
   },
 });

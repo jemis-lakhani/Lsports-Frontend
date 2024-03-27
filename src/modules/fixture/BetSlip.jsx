@@ -9,8 +9,7 @@ import { FaTrash } from "react-icons/fa";
 
 const BetSlip = () => {
   const dispatch = useDispatch();
-  const { slips, currentSlip, bets } = useSelector((state) => state.bets);
-  const { fixtureId } = useSelector((state) => state.markets);
+  const { slips, currentSlip, bets } = useSelector((state) => state.betSlip);
 
   const createSlip = (e, number) => {
     if (!slips.includes(number)) {
