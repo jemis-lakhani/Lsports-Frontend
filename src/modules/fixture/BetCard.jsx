@@ -8,7 +8,14 @@ import { deleteBet } from "@/store/BetSlipReducer";
 import clsx from "clsx";
 import { cardBG } from "@/lib/constants";
 
-function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
+function BetCard({
+  market,
+  bets,
+  fixture,
+  fixtureId,
+  selectedBetId,
+  baseLine,
+}) {
   const dispatch = useDispatch();
   const { bets: betsState } = useSelector((state) => state.betSlip);
   const [leagueName, setLeagueName] = useState();
@@ -57,7 +64,12 @@ function BetCard({ market, bets, fixture, fixtureId, selectedBet }) {
           <span className="w-[20%] text-center">VS</span>
           <span className="w-2/5 text-center">{team2}</span>
         </CardHeader>
-        <BetRow market={market} bets={bets} selectedBet={selectedBet} />
+        <BetRow
+          market={market}
+          bets={bets}
+          selectedBetId={selectedBetId}
+          baseLine={baseLine}
+        />
       </Card>
     </div>
   );

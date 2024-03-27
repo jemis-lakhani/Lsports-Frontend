@@ -29,7 +29,8 @@ const betSlipReducer = createSlice({
       delete state.bets[state.currentSlip][fixtureId];
     },
     setBets: (state, action) => {
-      const { market, bets, fixtureId, fixture, selectedBet } = action.payload;
+      const { market, bets, fixtureId, fixture, selectedBetId, baseLine } =
+        action.payload;
       if (state.slips.length === 0) {
         state.slips.push(1);
         state.currentSlip = 1;
@@ -42,7 +43,8 @@ const betSlipReducer = createSlice({
           fixtureId,
           fixture,
           bets,
-          selectedBet,
+          selectedBetId,
+          baseLine,
         },
       };
     },

@@ -97,7 +97,7 @@ const Sports = () => {
       )}
       {isFetching && (
         <div className="animate-pulse px-4 pt-4">
-          <div className="h-10 bg-zinc-800 rounded"></div>
+          <div className="h-10 bg-gray-800 rounded"></div>
         </div>
       )}
       {/* Sprots List */}
@@ -131,7 +131,7 @@ const Sports = () => {
       </Dialog>
       <Dialog>
         <DialogTrigger className="xl:hidden fixed left-6 bottom-10 flex justify-center items-center z-[990] bg-folder bg-no-repeat h-16 w-16 text-white p-2 pt-4 rounded text-md font-bold">
-          {currentSlip}
+          {currentSlip === 1 ? "One" : currentSlip}
           <div className="absolute top-3 right-0 -mt-4 -mr-2 px-2 bg-red-500 rounded-md">
             {bets[currentSlip] ? Object.keys(bets[currentSlip]).length : 0}
           </div>

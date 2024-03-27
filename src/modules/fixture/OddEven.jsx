@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 const OddEven = ({ market, handleBetChange }) => {
   const [tabList, setTabList] = useState([]);
 
-  const onTabSelect = (selectedBet) => {
+  const onTabSelect = (selectedBetId) => {
     const arr = [];
     const home = market?.Bets?.find((bet) => bet.Name.toLowerCase() === "odd");
     if (home) {
@@ -16,8 +16,8 @@ const OddEven = ({ market, handleBetChange }) => {
     }
 
     handleBetChange({
-      selectedBet,
-      allBets: { selectedBet: arr },
+      selectedBetId,
+      allBets: { selectedBetId: arr },
       market: market?.Name,
     });
   };

@@ -4,13 +4,13 @@ import React, { useMemo, useState } from "react";
 const UnderOver = ({ market, isMainCard, handleBetChange }) => {
   const [tabList, setTabList] = useState([]);
 
-  const TabTrigger = (key, title, price) => {
+  const TabTrigger = (betId, title, price, baseLine) => {
     return (
       <TabsTrigger
-        key={key + market.Name}
-        value={key}
+        key={betId + market.Name}
+        value={betId}
         className="flex flex-row justify-between w-[30%] text-white border-[1px] border-white data-[state=active]:text-black data-[state=active]:bg-white"
-        onClick={() => onTabSelect(key)}
+        onClick={() => onTabSelect(betId, baseLine)}
       >
         <span className="text-xs">{title}</span>
         <span className="text-xs">{price}</span>
@@ -18,7 +18,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
     );
   };
 
-  const onTabSelect = (selectedBet) => {
+  const onTabSelect = (selectedBetId, baseLine) => {
     const group = market?.Bets?.reduce((groupBy, bet) => {
       const { BaseLine, ...rest } = bet;
       if (!groupBy[BaseLine]) {
@@ -27,10 +27,12 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
       groupBy[BaseLine].push(rest);
       return groupBy;
     }, {});
+
     handleBetChange({
-      selectedBet,
+      selectedBetId,
       allBets: group,
       market: market?.Name,
+      baseLine,
     });
   };
 
@@ -53,7 +55,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
         const away = bets?.find((b) => b.Name.toLowerCase() === "over");
         if (isMainCard && BaseLine === MainLine) {
           if (home) {
-            arr.push(TabTrigger(home.Id, "Under", home.Price));
+            arr.push(TabTrigger(home.Id, "Under", home.Price, BaseLine));
           }
           if (home && away) {
             arr.push(
@@ -67,11 +69,11 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
             );
           }
           if (away) {
-            arr.push(TabTrigger(away.Id, "Over", away.Price));
+            arr.push(TabTrigger(away.Id, "Over", away.Price, BaseLine));
           }
         } else if (!isMainCard) {
           if (home) {
-            arr.push(TabTrigger(home.Id, "Under", home.Price));
+            arr.push(TabTrigger(home.Id, "Under", home.Price, BaseLine));
           }
           if (home && away) {
             arr.push(
@@ -85,7 +87,7 @@ const UnderOver = ({ market, isMainCard, handleBetChange }) => {
             );
           }
           if (away) {
-            arr.push(TabTrigger(away.Id, "Over", away.Price));
+            arr.push(TabTrigger(away.Id, "Over", away.Price, BaseLine));
           }
         }
         if (arr.length > 0) {

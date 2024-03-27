@@ -21,7 +21,7 @@ const WinOrLose = ({ market, fixtureId, handleBetChange }) => {
     );
   };
 
-  const onTabSelect = (selectedBet) => {
+  const onTabSelect = (selectedBetId) => {
     const arr = [];
     const home = market?.Bets?.find((bet) => bet.Name === "1");
     if (home) {
@@ -37,8 +37,8 @@ const WinOrLose = ({ market, fixtureId, handleBetChange }) => {
     }
 
     handleBetChange({
-      selectedBet,
-      allBets: { selectedBet: arr },
+      selectedBetId,
+      allBets: { selectedBetId: arr },
       market: market?.Name,
     });
   };

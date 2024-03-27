@@ -58,6 +58,7 @@ const BetSlip = () => {
 
   return (
     <div className="flex flex-col gap-3 p-6 xl:p-4">
+      <div className="uppercase font-semibold leading-none">Bet Slips</div>
       <div className="flex flex-row gap-2">{slipComponents}</div>
       <Button
         className={clsx("w-auto ml-auto", {
@@ -80,7 +81,8 @@ const BetSlip = () => {
                 bets={data?.bets}
                 fixture={data?.fixture}
                 fixtureId={data?.fixtureId}
-                selectedBet={data?.selectedBet}
+                selectedBetId={data?.selectedBetId}
+                baseLine={data?.baseLine}
               />
             );
           })

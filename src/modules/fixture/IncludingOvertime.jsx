@@ -21,7 +21,7 @@ const IncludingOvertime = ({ market, handleBetChange }) => {
     );
   };
 
-  const onTabSelect = (selectedBet) => {
+  const onTabSelect = (selectedBetId) => {
     const arr = [];
     const home = market?.Bets?.find((bet) => bet.Name === "1");
     if (home) {
@@ -33,8 +33,8 @@ const IncludingOvertime = ({ market, handleBetChange }) => {
     }
 
     handleBetChange({
-      selectedBet,
-      allBets: { selectedBet: arr },
+      selectedBetId,
+      allBets: { selectedBetId: arr },
       market: market?.Name,
     });
   };

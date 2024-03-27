@@ -12,6 +12,7 @@ import { setBets } from "@/store/BetSlipReducer";
 import IncludingOvertime from "./IncludingOvertime";
 import { FaAngleLeft } from "react-icons/fa6";
 import { showMarkets } from "@/store/MobileViewReducer";
+import { FcSportsMode } from "react-icons/fc";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -29,12 +30,12 @@ const FixtureMarket = () => {
     );
   };
 
-  const handleBetChange = ({ allBets, market, selectedBet }) => {
+  const handleBetChange = ({ allBets, market, selectedBetId, baseLine }) => {
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
         bets.some((bet) => {
-          if (bet.Id === selectedBet) {
+          if (bet.Id === selectedBetId) {
             selectedBets = bets;
             return true;
           }
@@ -53,8 +54,9 @@ const FixtureMarket = () => {
             fixtureId,
             bets: selectedBets,
             fixture: fixture?.data?.Fixture,
-            selectedBet,
+            selectedBetId,
             market,
+            baseLine,
           }),
         );
       });
@@ -64,8 +66,8 @@ const FixtureMarket = () => {
     return bets &&
       bets[currentSlip] &&
       bets[currentSlip][fixtureId] &&
-      bets[currentSlip][fixtureId].selectedBet
-      ? bets[currentSlip][fixtureId].selectedBet
+      bets[currentSlip][fixtureId].selectedBetId
+      ? bets[currentSlip][fixtureId].selectedBetId
       : "";
   };
 
@@ -90,8 +92,10 @@ const FixtureMarket = () => {
           "opacity-20": isLoading,
         })}
       >
-        <div className="h-[200px] w-full border-2 border-amber-800 rounded-lg"></div>
-        <Tabs className="w-full" value={selectedBetFromMainCard()}>
+        <div className="flex items-center justify-center h-[200px] w-full rounded-lg">
+          <FcSportsMode className="h-16 w-16 opacity-90" />
+        </div>
+        <Tabs className="w-full select-none" value={selectedBetFromMainCard()}>
           <TabsList className="flex flex-col h-full gap-3 p-0 justify-between bg-transparent">
             {markets.length > 0 && markets?.length !== 0 ? (
               markets?.map((mk, index) => {
@@ -109,7 +113,7 @@ const FixtureMarket = () => {
                   return (
                     <Card
                       key={id}
-                      className="flex flex-col border-2 w-full gap-3 p-3 rounded-lg"
+                      className="flex flex-col bg-muted border-2 w-full gap-3 p-3 rounded-lg"
                     >
                       {Title(mk.Name)}
                       <WinOrLose
@@ -123,7 +127,7 @@ const FixtureMarket = () => {
                   return (
                     <Card
                       key={id}
-                      className="flex flex-col border-2 w-full gap-3 p-3 rounded-lg"
+                      className="flex flex-col  bg-muted border-2 w-full gap-3 p-3 rounded-lg"
                     >
                       {Title(mk.Name)}
                       <UnderOver
@@ -137,7 +141,7 @@ const FixtureMarket = () => {
                   return (
                     <Card
                       key={id}
-                      className="flex flex-col border-2 w-full gap-3 p-3 rounded-lg"
+                      className="flex flex-col bg-muted border-2 w-full gap-3 p-3 rounded-lg"
                     >
                       {Title(mk.Name)}
                       <HandiCap
@@ -151,7 +155,7 @@ const FixtureMarket = () => {
                   return (
                     <Card
                       key={id}
-                      className="flex flex-col border-2 w-full gap-3 p-3 rounded-lg"
+                      className="flex flex-col bg-muted border-2 w-full gap-3 p-3 rounded-lg"
                     >
                       {Title(mk.Name)}
                       <OddEven market={mk} handleBetChange={handleBetChange} />
@@ -161,7 +165,7 @@ const FixtureMarket = () => {
                   return (
                     <Card
                       key={id}
-                      className="flex flex-col border-2 w-full gap-3 p-3 rounded-lg"
+                      className="flex flex-col bg-muted border-2 w-full gap-3 p-3 rounded-lg"
                     >
                       {Title(mk.Name)}
                       <IncludingOvertime

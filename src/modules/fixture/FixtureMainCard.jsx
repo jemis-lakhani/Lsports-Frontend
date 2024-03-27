@@ -59,12 +59,12 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
     }
   };
 
-  const handleBetChange = ({ selectedBet, allBets, market }) => {
+  const handleBetChange = ({ selectedBetId, allBets, market, baseLine }) => {
     let selectedBets = [];
     Object.entries(allBets).forEach(([key, bets]) => {
       if (bets) {
         bets.some((bet) => {
-          if (bet.Id === selectedBet) {
+          if (bet.Id === selectedBetId) {
             selectedBets = bets;
             return true;
           }
@@ -83,8 +83,9 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
             fixtureId,
             bets: selectedBets,
             fixture: fixture?.data?.Fixture,
-            selectedBet,
+            selectedBetId,
             market,
+            baseLine,
           }),
         );
       });
@@ -112,14 +113,16 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
     return bets &&
       bets[currentSlip] &&
       bets[currentSlip][fixtureId] &&
-      bets[currentSlip][fixtureId].selectedBet
-      ? bets[currentSlip][fixtureId].selectedBet
+      bets[currentSlip][fixtureId].selectedBetId
+      ? bets[currentSlip][fixtureId].selectedBetId
       : "";
   };
 
   return (
     <div className="flex flex-col gap-2" ref={reference}>
-      <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
+      <span className="text-xs text-gray-400 font-semibold ml-1">
+        {leagueName}
+      </span>
       <Card className={`flex flex-col gap-2 p-3 ${cardBG[fixture?.Sport?.Id]}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 text-white text-xs p-0 px-1">
           <span className="mt-0">{time}</span>
@@ -141,7 +144,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
           <span className="w-[20%] text-center">VS</span>
           <span className="w-2/5 text-center">{team2}</span>
         </CardHeader>
-        <Tabs className="w-full" value={selectedBetFromMarkets()}>
+        <Tabs className="w-full select-none" value={selectedBetFromMarkets()}>
           <TabsList className="flex flex-col h-full gap-3 justify-between bg-transparent">
             {markets?.map((mk) => {
               if (isAnyMainWinLoseBet(markets, mk)) {
