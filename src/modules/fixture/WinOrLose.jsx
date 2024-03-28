@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { TabsTrigger } from "@/components/ui/tabs";
 import clsx from "clsx";
 
-const WinOrLose = ({ market, fixtureId, handleBetChange }) => {
+const WinOrLose = ({ market, handleBetChange }) => {
   const [tabs, setTabs] = useState([]);
 
   const TabTrigger = (key, title, price) => {

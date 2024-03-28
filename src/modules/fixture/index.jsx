@@ -92,7 +92,7 @@ const Fixtures = ({ sportId }) => {
             market = doc.value?.Markets;
             fixtureId = doc.value?.FixtureId;
             sportName = doc.value?.Fixture?.Sport?.Name;
-            return true; // Exit the iteration early
+            return true;
           }
         });
       }
