@@ -53,9 +53,9 @@ const Sports = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: {
+        body: JSON.stringify({
           gameStatus: "BET",
-        },
+        }),
       })
         .then((res) => {
           return res.json();
