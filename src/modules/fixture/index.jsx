@@ -12,6 +12,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const COUNT = 10;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+let marketNull = 0;
+let marketNotNull = 0;
 
 const fetchFixtures = async ({ pageParam, sportId }) => {
   const body = {
@@ -111,6 +113,20 @@ const Fixtures = ({ sportId }) => {
     dispatch(setLoader(isFetching));
   }, [isFetching]);
 
+  const findLastElement = (lastPage) => {
+    const documents = lastPage.data?.documents;
+
+    for (let i = documents.length - 1; i >= 0; i--) {
+      if (
+        documents[i].value?.Markets !== null &&
+        documents[i].value?.Markets?.length > 0
+      ) {
+        return documents[i].value?.FixtureId;
+      }
+    }
+    return -1;
+  };
+
   const refreshData = () => {
     queryClient.invalidateQueries({ queryKey: ["fixtures"] });
   };
@@ -134,16 +150,17 @@ const Fixtures = ({ sportId }) => {
           })}
         >
           {isSuccess &&
-            fixtures?.pages.map((page, i) =>
-              page?.data?.documents?.map((doc, j) => {
+            fixtures?.pages.map((page, i) => {
+              let lastElementId;
+              if (fixtures?.pages.length === i + 1) {
+                lastElementId = findLastElement(page);
+              }
+              return page?.data?.documents?.map((doc) => {
                 if (
                   doc?.value?.Markets !== null &&
                   doc?.value?.Markets?.length > 0
                 ) {
-                  if (
-                    fixtures?.pages.length === i + 1 &&
-                    page?.data?.documents.length === j + 1
-                  ) {
+                  if (doc.value?.FixtureId === lastElementId) {
                     return (
                       <FixtureMainCard
                         reference={ref}
@@ -166,8 +183,8 @@ const Fixtures = ({ sportId }) => {
                     );
                   }
                 }
-              }),
-            )}
+              });
+            })}
         </div>
       </div>
       {isFetching && (
