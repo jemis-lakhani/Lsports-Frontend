@@ -48,7 +48,12 @@ const Sports = () => {
   } = useQuery({
     queryKey: ["sports-list"],
     queryFn: () => {
-      return fetch(`${BACKEND_URL}/sports`, { method: "POST" })
+      return fetch(`${BACKEND_URL}/sports`, {
+        method: "POST",
+        body: {
+          gameStatus: "BET",
+        },
+      })
         .then((res) => {
           return res.json();
         })
