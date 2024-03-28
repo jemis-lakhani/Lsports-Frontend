@@ -50,6 +50,9 @@ const Sports = () => {
     queryFn: () => {
       return fetch(`${BACKEND_URL}/sports`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: {
           gameStatus: "BET",
         },
