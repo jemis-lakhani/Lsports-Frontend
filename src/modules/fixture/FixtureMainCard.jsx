@@ -5,7 +5,11 @@ import UnderOver from "./UnderOver";
 import { Button } from "@/components/ui/button";
 import HandiCap from "./HandiCap";
 import { useDispatch, useSelector } from "react-redux";
-import { setFixtureId, setMarkets } from "../../store/MarketReducer";
+import {
+  setFixtureId,
+  setLeagueName,
+  setMarkets,
+} from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
 import { cardBG } from "@/lib/constants";
@@ -16,7 +20,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const dispatch = useDispatch();
   const { bets, currentSlip } = useSelector((state) => state.betSlip);
-  const [leagueName, setLeagueName] = useState();
+  const [leagueName, setLeague] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
   const [time, setTime] = useState();
@@ -41,7 +45,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
       total += Math.floor(mk?.Bets?.length / 2);
     });
     setTotal(total);
-    setLeagueName(fixture?.League?.Name);
+    setLeague(fixture?.League?.Name);
     setTime(fixture?.StartDate.replace("T", " "));
     if (fixture?.Participants.length !== 0) {
       const team1 = fixture?.Participants?.find((p) => p.Position === "1");
@@ -54,6 +58,8 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const handleMarket = () => {
     dispatch(setMarkets(markets === null ? [] : markets));
     dispatch(setFixtureId(fixtureId));
+    console.log({ leagueName });
+    dispatch(setLeagueName(leagueName));
     if (isMobileScreen) {
       dispatch(showMarkets());
     }
@@ -139,10 +145,10 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
             ""
           )}
         </CardHeader>
-        <CardHeader className="flex flex-row justify-evenly items-center space-y-0 text-sm p-0 px-1">
-          <span className="w-2/5 text-center">{team1}</span>
+        <CardHeader className="flex flex-row justify-between items-center space-y-0 text-sm p-0 px-1">
+          <span className="w-[30%] text-center">{team1}</span>
           <span className="w-[20%] text-center">VS</span>
-          <span className="w-2/5 text-center">{team2}</span>
+          <span className="w-[30%] text-center">{team2}</span>
         </CardHeader>
         <Tabs className="w-full select-none" value={selectedBetFromMarkets()}>
           <TabsList className="flex flex-col h-full gap-3 justify-between bg-transparent">

@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import FixtureMainCard from "./FixtureMainCard";
 import { useDispatch } from "react-redux";
-import { setFixtureId, setMarkets } from "@/store/MarketReducer";
+import { setFixtureId, setLeagueName, setMarkets } from "@/store/MarketReducer";
 import Loader from "../Loader";
 import { setLoader } from "@/store/LoaderReducer";
 import clsx from "clsx";
@@ -73,6 +73,8 @@ const Fixtures = ({ sportId }) => {
     setPage(0);
     refetch();
     dispatch(setMarkets([]));
+    dispatch(setFixtureId(""));
+    dispatch(setLeagueName(""));
   }, [sportId]);
 
   useEffect(() => {
@@ -81,6 +83,7 @@ const Fixtures = ({ sportId }) => {
       let market = null;
       let fixtureId;
       let sportName;
+      let leagueName;
       if (
         fixtures?.pages &&
         fixtures?.pages?.length > 0 &&
@@ -92,6 +95,7 @@ const Fixtures = ({ sportId }) => {
             market = doc.value?.Markets;
             fixtureId = doc.value?.FixtureId;
             sportName = doc.value?.Fixture?.Sport?.Name;
+            leagueName = doc.value?.Fixture?.League?.Name;
             return true;
           }
         });
@@ -99,6 +103,7 @@ const Fixtures = ({ sportId }) => {
       setSportName(sportName);
       dispatch(setMarkets(market === null ? [] : market));
       dispatch(setFixtureId(fixtureId));
+      dispatch(setLeagueName(leagueName));
     }
   }, [fixtures, isInitialFetch]);
 

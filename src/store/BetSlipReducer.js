@@ -36,17 +36,21 @@ const betSlipReducer = createSlice({
         state.currentSlip = 1;
       }
       const currentBets = state.bets[state.currentSlip] || {};
-      state.bets[state.currentSlip] = {
-        ...currentBets,
-        [fixtureId]: {
-          market,
-          fixtureId,
-          fixture,
-          bets,
-          selectedBetId,
-          baseLine,
-        },
-      };
+      if (currentBets[fixtureId]?.selectedBetId === selectedBetId) {
+        delete currentBets[fixtureId];
+      } else {
+        state.bets[state.currentSlip] = {
+          ...currentBets,
+          [fixtureId]: {
+            market,
+            fixtureId,
+            fixture,
+            bets,
+            selectedBetId,
+            baseLine,
+          },
+        };
+      }
     },
   },
 });

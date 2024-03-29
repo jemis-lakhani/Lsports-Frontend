@@ -51,18 +51,20 @@ function BetCard({
         )}
       >
         <div className="flex justify-end h-5 items-center space-x-2">
-          <div className="font-bold leading-none text-sm">{market}</div>
+          <div className="font-bold leading-none text-sm truncate">
+            {market}
+          </div>
           <Separator className="w-[2px] bg-gray-400" orientation="vertical" />
-          <span className="text-sm">{time}</span>
+          <span className="text-sm truncate">{time}</span>
           <IoCloseCircleOutline
             className="text-white h-6 w-6 cursor-pointer"
             onClick={() => handleDeleteBet()}
           />
         </div>
-        <CardHeader className="flex flex-row justify-evenly items-center space-y-0 text-sm p-0 px-1">
-          <span className="w-2/5 text-center">{team1}</span>
+        <CardHeader className="flex flex-row justify-between items-center space-y-0 text-sm p-0 px-1">
+          <span className="w-[30%] text-center">{team1}</span>
           <span className="w-[20%] text-center">VS</span>
-          <span className="w-2/5 text-center">{team2}</span>
+          <span className="w-[30%] text-center">{team2}</span>
         </CardHeader>
         <BetRow
           market={market}

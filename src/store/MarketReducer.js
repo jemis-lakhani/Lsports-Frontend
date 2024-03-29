@@ -5,6 +5,7 @@ const marketReducer = createSlice({
   initialState: {
     fixtureId: null,
     markets: [],
+    leagueName: "",
   },
   reducers: {
     setMarkets: (state, action) => {
@@ -13,9 +14,13 @@ const marketReducer = createSlice({
     setFixtureId: (state, action) => {
       state.fixtureId = action.payload;
     },
+    setLeagueName: (state, action) => {
+      state.leagueName = action.payload;
+    },
   },
 });
 
-export const { setMarkets, setFixtureId } = marketReducer.actions;
+export const { setMarkets, setFixtureId, setLeagueName } =
+  marketReducer.actions;
 
 export default marketReducer.reducer;

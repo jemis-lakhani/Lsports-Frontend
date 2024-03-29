@@ -18,7 +18,9 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const FixtureMarket = () => {
   const dispatch = useDispatch();
-  const { markets, fixtureId } = useSelector((state) => state.markets);
+  const { markets, fixtureId, leagueName } = useSelector(
+    (state) => state.markets,
+  );
   const { loader: isLoading } = useSelector((state) => state.loader);
   const { bets, currentSlip } = useSelector((state) => state.betSlip);
 
@@ -78,6 +80,8 @@ const FixtureMarket = () => {
           <Loader />
         </div>
       )}
+
+      {/* Mobile View */}
       <div className="sticky w-full top-0 right-0 xl:hidden flex items-center p-5 text-white font-bold bg-muted rounded-none border-0">
         <button
           className="flex items-center uppercase leading-none cursor-pointer"
@@ -87,6 +91,8 @@ const FixtureMarket = () => {
           <span className="ml-2">Pre Match</span>
         </button>
       </div>
+      {/* Mobile View */}
+
       <div
         className={clsx("flex flex-col gap-3 p-4", {
           "opacity-20": isLoading,
@@ -94,6 +100,9 @@ const FixtureMarket = () => {
       >
         <div className="flex items-center justify-center h-[200px] w-full rounded-lg">
           <FcSportsMode className="h-16 w-16 opacity-90" />
+        </div>
+        <div className="text-center text-sm mx-auto font-semibold text-gray-400">
+          {leagueName}
         </div>
         <Tabs className="w-full select-none" value={selectedBetFromMainCard()}>
           <TabsList className="flex flex-col h-full gap-3 p-0 justify-between bg-transparent">
