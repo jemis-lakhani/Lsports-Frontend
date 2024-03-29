@@ -19,12 +19,14 @@ function BetCard({
   const dispatch = useDispatch();
   const { bets: betsState } = useSelector((state) => state.betSlip);
   const [leagueName, setLeagueName] = useState();
+  const [location, setLocation] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
   const [time, setTime] = useState();
 
   useMemo(() => {
     setLeagueName(fixture?.League?.Name);
+    setLocation(fixture?.Location?.Name);
     setTime(fixture?.StartDate.replace("T", " "));
     if (fixture?.Participants.length !== 0) {
       const team1 = fixture?.Participants?.find((p) => p.Position === "1");
@@ -40,7 +42,9 @@ function BetCard({
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-xs text-gray-400 ml-1">{leagueName}</span>
+      <span className="text-xs text-gray-400 ml-1">
+        {location}&nbsp;&gt;&nbsp;{leagueName}
+      </span>
       <Card
         className={clsx(
           `flex flex-col gap-2 ${

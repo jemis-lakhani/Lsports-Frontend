@@ -18,7 +18,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const FixtureMarket = () => {
   const dispatch = useDispatch();
-  const { markets, fixtureId, leagueName } = useSelector(
+  const { markets, fixtureId, leagueName, location } = useSelector(
     (state) => state.markets,
   );
   const { loader: isLoading } = useSelector((state) => state.loader);
@@ -102,7 +102,7 @@ const FixtureMarket = () => {
           <FcSportsMode className="h-16 w-16 opacity-90" />
         </div>
         <div className="text-center text-sm mx-auto font-semibold text-gray-400">
-          {leagueName}
+          {location}&nbsp;&gt;&nbsp;{leagueName}
         </div>
         <Tabs className="w-full select-none" value={selectedBetFromMainCard()}>
           <TabsList className="flex flex-col h-full gap-3 p-0 justify-between bg-transparent">

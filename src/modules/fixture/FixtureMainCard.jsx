@@ -9,6 +9,7 @@ import {
   setFixtureId,
   setLeagueName,
   setMarkets,
+  setLocation,
 } from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
@@ -21,6 +22,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const dispatch = useDispatch();
   const { bets, currentSlip } = useSelector((state) => state.betSlip);
   const [leagueName, setLeague] = useState();
+  const [location, setLocationName] = useState();
   const [team1, setTeam1] = useState();
   const [team2, setTeam2] = useState();
   const [time, setTime] = useState();
@@ -46,6 +48,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
     });
     setTotal(total);
     setLeague(fixture?.League?.Name);
+    setLocationName(fixture?.Location?.Name);
     setTime(fixture?.StartDate.replace("T", " "));
     if (fixture?.Participants.length !== 0) {
       const team1 = fixture?.Participants?.find((p) => p.Position === "1");
@@ -58,8 +61,8 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   const handleMarket = () => {
     dispatch(setMarkets(markets === null ? [] : markets));
     dispatch(setFixtureId(fixtureId));
-    console.log({ leagueName });
     dispatch(setLeagueName(leagueName));
+    dispatch(setLocation(location));
     if (isMobileScreen) {
       dispatch(showMarkets());
     }
@@ -127,7 +130,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
   return (
     <div className="flex flex-col gap-2" ref={reference}>
       <span className="text-xs text-gray-400 font-semibold ml-1">
-        {leagueName}
+        {location}&nbsp;&gt;&nbsp;{leagueName}
       </span>
       <Card className={`flex flex-col gap-2 p-3 ${cardBG[fixture?.Sport?.Id]}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 text-white text-xs p-0 px-1">
