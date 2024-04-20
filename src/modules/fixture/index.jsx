@@ -8,6 +8,7 @@ import {
   setLeagueName,
   setMarkets,
   setLocation,
+  setSportId,
 } from "@/store/MarketReducer";
 import Loader from "../Loader";
 import { setLoader } from "@/store/LoaderReducer";
@@ -17,9 +18,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const COUNT = 10;
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-let marketNull = 0;
-let marketNotNull = 0;
-
 const fetchFixtures = async ({ pageParam, sportId }) => {
   const body = {
     gameStatus: "BET",
@@ -89,6 +87,7 @@ const Fixtures = ({ sportId }) => {
       let market = null;
       let fixtureId;
       let sportName;
+      let sportId;
       let leagueName;
       let location;
       if (
@@ -102,6 +101,7 @@ const Fixtures = ({ sportId }) => {
             market = doc.value?.Markets;
             fixtureId = doc.value?.FixtureId;
             sportName = doc.value?.Fixture?.Sport?.Name;
+            sportId = doc.value?.Fixture?.Sport?.Id;
             leagueName = doc.value?.Fixture?.League?.Name;
             location = doc.value?.Fixture?.Location?.Name;
             return true;
@@ -113,6 +113,7 @@ const Fixtures = ({ sportId }) => {
       dispatch(setFixtureId(fixtureId));
       dispatch(setLeagueName(leagueName));
       dispatch(setLocation(location));
+      dispatch(setSportId(sportId));
     }
   }, [fixtures, isInitialFetch]);
 
@@ -183,6 +184,7 @@ const Fixtures = ({ sportId }) => {
                         markets={doc?.value?.Markets}
                         fixture={doc?.value?.Fixture}
                         fixtureId={doc?.value?.FixtureId}
+                        sportId={doc?.value?.Fixture?.Sport?.Id}
                       />
                     );
                   } else {
@@ -193,6 +195,7 @@ const Fixtures = ({ sportId }) => {
                         markets={doc?.value?.Markets}
                         fixture={doc?.value?.Fixture}
                         fixtureId={doc?.value?.FixtureId}
+                        sportId={doc?.value?.Fixture?.Sport?.Id}
                       />
                     );
                   }

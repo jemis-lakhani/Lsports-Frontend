@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import OddEven from "./OddEven";
 import WinOrLose from "./WinOrLose";
 import UnderOver from "./UnderOver";
@@ -12,13 +12,19 @@ import { setBets } from "@/store/BetSlipReducer";
 import IncludingOvertime from "./IncludingOvertime";
 import { FaAngleLeft } from "react-icons/fa6";
 import { showMarkets } from "@/store/MobileViewReducer";
+import Football from "@/components/tracker/Football";
+import Baseball from "@/components/tracker/Baseball";
+import BasketBall from "@/components/tracker/BasketBall";
+import AmericanFootball from "@/components/tracker/AmericanFootball";
+import Hockey from "@/components/tracker/Hockey";
+import Volleyball from "@/components/tracker/Volleyball";
 import { FcSportsMode } from "react-icons/fc";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const FixtureMarket = () => {
   const dispatch = useDispatch();
-  const { markets, fixtureId, leagueName, location } = useSelector(
+  const { markets, fixtureId, leagueName, location, sportId } = useSelector(
     (state) => state.markets,
   );
   const { loader: isLoading } = useSelector((state) => state.loader);
@@ -73,6 +79,46 @@ const FixtureMarket = () => {
       : "";
   };
 
+  useEffect(() => {
+    // Load the custom script dynamically
+    const script = document.createElement("script");
+    script.innerHTML = `
+      !(function(){
+        var d="STATSCOREWidgetsEmbederScript";
+        if(!window.document.getElementById(d)){
+          window.STATSCOREWidgets={};
+          window.STATSCOREWidgets.onLoadCallbacks=[];
+          window.STATSCOREWidgets.onLoad=function(d){
+            window.STATSCOREWidgets.onLoadCallbacks.push(d)
+          };
+          var n=window.document.createElement("script");
+          n.src="https://wgt-s3-cdn.statscore.com/bundle/Embeder.js";
+          n.async=!0;
+          n.id=d;
+          n.addEventListener("error",function(d){
+            for(var n=0;n<window.STATSCOREWidgets.onLoadCallbacks.length;n++)
+              window.STATSCOREWidgets.onLoadCallbacks[n](d)
+          });
+          window.document.body.appendChild(n)
+        }
+      }());
+      window.STATSCOREWidgets.onLoad(function(e){
+        if(e){
+          console.error(e);
+          return;
+        }
+        new window.STATSCOREWidgets.Widget(document.getElementById("STATSCOREWidget17135898724143"),"66234e314c6a5387703a7332",{"language":"en","eventId":"m:${fixtureId}"},{loader:{enabled:true}});
+      });
+    `;
+
+    document.body.appendChild(script);
+
+    // Clean up function to remove the script when the component unmounts
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [fixtureId]);
+
   return (
     <div className="relative flex flex-col h-full">
       {isLoading && (
@@ -98,8 +144,18 @@ const FixtureMarket = () => {
           "opacity-20": isLoading,
         })}
       >
-        <div className="flex items-center justify-center h-[200px] w-full rounded-lg">
-          <FcSportsMode className="h-16 w-16 opacity-90" />
+        <div className="flex items-center justify-center w-full rounded-lg">
+          {sportId === 6046 && <Football fixtureId={fixtureId} />}
+          {sportId === 154914 && <Baseball fixtureId={fixtureId} />}
+          {sportId === 48242 && <BasketBall fixtureId={fixtureId} />}
+          {sportId === 131506 && <AmericanFootball fixtureId={fixtureId} />}
+          {sportId === 35232 && <Hockey fixtureId={fixtureId} />}
+          {sportId === 154830 && <Volleyball fixtureId={fixtureId} />}
+          {sportId === 687890 && (
+            <div className="flex items-center justify-center w-full h-[200px]">
+              <FcSportsMode className="h-16 w-16 opacity-90" />
+            </div>
+          )}
         </div>
         <div className="text-center text-sm mx-auto font-semibold text-gray-400">
           {location}&nbsp;&gt;&nbsp;{leagueName}

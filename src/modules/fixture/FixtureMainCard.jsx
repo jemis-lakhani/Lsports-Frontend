@@ -10,6 +10,7 @@ import {
   setLeagueName,
   setMarkets,
   setLocation,
+  setSportId,
 } from "../../store/MarketReducer";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { setBets } from "@/store/BetSlipReducer";
@@ -18,7 +19,14 @@ import { showMarkets } from "@/store/MobileViewReducer";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
+function FixtureMainCard({
+  id,
+  markets,
+  fixture,
+  reference,
+  fixtureId,
+  sportId,
+}) {
   const dispatch = useDispatch();
   const { bets, currentSlip } = useSelector((state) => state.betSlip);
   const [leagueName, setLeague] = useState();
@@ -63,6 +71,7 @@ function FixtureMainCard({ id, markets, fixture, reference, fixtureId }) {
     dispatch(setFixtureId(fixtureId));
     dispatch(setLeagueName(leagueName));
     dispatch(setLocation(location));
+    dispatch(setSportId(sportId));
     if (isMobileScreen) {
       dispatch(showMarkets());
     }
